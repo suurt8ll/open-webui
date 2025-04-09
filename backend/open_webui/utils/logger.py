@@ -10,12 +10,11 @@ from open_webui.env import (
     AUDIT_LOG_LEVEL,
     AUDIT_LOGS_FILE_PATH,
     GLOBAL_LOG_LEVEL,
+    SRC_LOG_LEVELS,
 )
-
 
 if TYPE_CHECKING:
     from loguru import Record
-
 
 def stdout_format(record: "Record") -> str:
     """
@@ -34,7 +33,6 @@ def stdout_format(record: "Record") -> str:
         "<level>{message}</level> - {extra[extra_json]}"
         "\n{exception}"
     )
-
 
 class InterceptHandler(logging.Handler):
     """
@@ -61,7 +59,6 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=depth, exception=record.exc_info).log(
             level, record.getMessage()
         )
-
 
 def file_format(record: "Record"):
     """
@@ -93,28 +90,34 @@ def file_format(record: "Record"):
 
 def dynamic_level_filter(record: "Record"):
     """
-    Filters logs based on a 'log_level' specified in the record's extra data.
-    If 'log_level' is not present or invalid, it defaults to GLOBAL_LOG_LEVEL.
-    Allows a message if its level is >= the specified or default level.
+    Filters logs based on the log level determined from the record's extra data. The log level is determined as follows:
+    1. If 'log_level' is present in the extra, use that.
+    2. Else, if 'log_source' is present in the extra, look up its level from SRC_LOG_LEVELS.
+       If the source's level is valid, use it; else, use GLOBAL_LOG_LEVEL.
+    3. Otherwise, default to GLOBAL_LOG_LEVEL.
+    Allows a message if its level is >= the determined level.
     """
-    # Use GLOBAL_LOG_LEVEL from env as the default
     default_level_name = GLOBAL_LOG_LEVEL
-    log_level_name = record["extra"].get("log_level", default_level_name)
+    log_level_name = record["extra"].get("log_level")
 
-    message_level = logger.level(record["level"].name).no  # Get numeric level of the message
+    if log_level_name is None:
+        log_source = record["extra"].get("log_source")
+        if log_source is not None:
+            log_level_name = SRC_LOG_LEVELS.get(log_source, default_level_name)
+        else:
+            log_level_name = default_level_name
+
+    message_level = logger.level(record["level"].name).no
     try:
-        # Get numeric level from 'extra' or use default
         bypass_level = logger.level(log_level_name).no
     except ValueError:
-        # Fallback to default if the provided level name is invalid
         print(
             f"Warning: Invalid log level '{log_level_name}' provided in logger.bind(). "
             f"Using default '{default_level_name}' instead.",
-            file=sys.stderr # Print warnings to stderr
+            file=sys.stderr
         )
         bypass_level = logger.level(default_level_name).no
 
-    # Log the message if its level is high enough compared to the bound/default level
     return message_level >= bypass_level
 
 def stdout_filter(record: "Record"):
@@ -142,7 +145,6 @@ def start_logger():
     enable_audit_logging (bool): Determines whether audit-specific log entries should be recorded to file.
     """
     logger.remove()
-
     logger.add(
         sys.stdout,
         level=0,
@@ -176,4 +178,4 @@ def start_logger():
         uvicorn_logger.handlers = [InterceptHandler()]
 
     logger.info(f"Logger initialized. Default stdout log level (when not bound): {GLOBAL_LOG_LEVEL}")
-    logger.info("Use logger.bind(log_level='LEVEL').<log_method>('...') to set per-message levels.")
+    logger.info("Use logger.bind(log_level='LEVEL', log_source='SOURCE').<log_method>('...') to set per-message levels and sources.")
