@@ -2,7 +2,7 @@
 from open_webui.utils.logger import start_logger
 start_logger()
 from loguru import logger
-log = logger.bind(log_level="MAIN")
+log = logger.bind(log_source="MAIN")
 
 import asyncio
 import inspect
