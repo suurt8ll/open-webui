@@ -10,7 +10,6 @@ import json
 
 
 import collections.abc
-from open_webui.env import SRC_LOG_LEVELS
 
 log = logger.bind(log_source="MAIN")
 

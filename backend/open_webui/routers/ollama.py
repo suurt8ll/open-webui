@@ -53,7 +53,6 @@ from open_webui.config import (
 )
 from open_webui.env import (
     ENV,
-    SRC_LOG_LEVELS,
     AIOHTTP_CLIENT_TIMEOUT,
     AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST,
     BYPASS_MODEL_ACCESS_CONTROL,

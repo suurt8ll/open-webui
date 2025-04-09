@@ -335,7 +335,6 @@ from open_webui.env import (
     GLOBAL_LOG_LEVEL,
     MAX_BODY_LOG_SIZE,
     SAFE_MODE,
-    SRC_LOG_LEVELS,
     VERSION,
     WEBUI_BUILD_HASH,
     WEBUI_SECRET_KEY,

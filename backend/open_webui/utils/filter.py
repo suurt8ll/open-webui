@@ -2,7 +2,6 @@ import inspect
 from loguru import logger
 from open_webui.utils.plugin import load_function_module_by_id
 from open_webui.models.functions import Functions
-from open_webui.env import SRC_LOG_LEVELS
 
 log = logger.bind(log_source="MAIN")
 

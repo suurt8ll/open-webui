@@ -36,7 +36,6 @@ from open_webui.config import (
     TAVILY_API_KEY,
     TAVILY_EXTRACT_DEPTH,
 )
-from open_webui.env import SRC_LOG_LEVELS
 
 log = logger.bind(log_source="RAG")
 

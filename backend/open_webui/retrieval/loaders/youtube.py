@@ -2,7 +2,6 @@ from loguru import logger
 from typing import Any, Dict, Generator, List, Optional, Sequence, Union
 from urllib.parse import parse_qs, urlparse
 from langchain_core.documents import Document
-from open_webui.env import SRC_LOG_LEVELS
 
 log = logger.bind(log_source="RAG")
 

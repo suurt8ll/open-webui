@@ -10,7 +10,6 @@ from open_webui.config import (
     MILVUS_DB,
     MILVUS_TOKEN,
 )
-from open_webui.env import SRC_LOG_LEVELS
 
 log = logger.bind(log_source="RAG")
 

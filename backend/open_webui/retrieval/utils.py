@@ -21,7 +21,6 @@ from open_webui.retrieval.vector.main import GetResult
 
 
 from open_webui.env import (
-    SRC_LOG_LEVELS,
     OFFLINE_MODE,
     ENABLE_FORWARD_USER_INFO_HEADERS,
 )

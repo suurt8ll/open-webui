@@ -52,8 +52,7 @@ from open_webui.utils.filter import (
     process_filter_functions,
 )
 
-from open_webui.env import SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL, BYPASS_MODEL_ACCESS_CONTROL
-
+from open_webui.env import BYPASS_MODEL_ACCESS_CONTROL
 
 log = logger.bind(log_source="MAIN")
 

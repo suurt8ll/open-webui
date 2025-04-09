@@ -2,7 +2,7 @@ import json
 from loguru import logger
 import requests
 from open_webui.config import WEBUI_FAVICON_URL
-from open_webui.env import SRC_LOG_LEVELS, VERSION
+from open_webui.env import VERSION
 
 log = logger.bind(log_source="WEBHOOK")
 

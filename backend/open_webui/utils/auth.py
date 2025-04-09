@@ -21,7 +21,6 @@ from open_webui.env import (
     WEBUI_SECRET_KEY,
     TRUSTED_SIGNATURE_KEY,
     STATIC_DIR,
-    SRC_LOG_LEVELS,
 )
 
 from fastapi import BackgroundTasks, Depends, HTTPException, Request, Response, status

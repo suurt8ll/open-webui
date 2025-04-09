@@ -27,7 +27,6 @@ from open_webui.socket.utils import RedisDict, RedisLock
 
 from open_webui.env import (
     GLOBAL_LOG_LEVEL,
-    SRC_LOG_LEVELS,
 )
 
 

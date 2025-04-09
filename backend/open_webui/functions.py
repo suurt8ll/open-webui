@@ -32,7 +32,6 @@ from open_webui.utils.plugin import load_function_module_by_id
 from open_webui.utils.tools import get_tools
 from open_webui.utils.access_control import has_access
 
-from open_webui.env import SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
 
 from open_webui.utils.misc import (
     add_or_update_system_message,

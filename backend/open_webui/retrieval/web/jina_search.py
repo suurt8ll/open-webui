@@ -1,7 +1,6 @@
 from loguru import logger
 import requests
 from open_webui.retrieval.web.main import SearchResult
-from open_webui.env import SRC_LOG_LEVELS
 from yarl import URL
 
 log = logger.bind(log_source="RAG")

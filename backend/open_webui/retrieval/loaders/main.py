@@ -23,7 +23,6 @@ from langchain_core.documents import Document
 
 from open_webui.retrieval.loaders.mistral import MistralLoader
 
-from open_webui.env import SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
 
 log = logger.bind(log_source="RAG")
 

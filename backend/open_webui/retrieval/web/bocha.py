@@ -4,7 +4,6 @@ from typing import Optional
 import requests
 import json
 from open_webui.retrieval.web.main import SearchResult, get_filtered_results
-from open_webui.env import SRC_LOG_LEVELS
 
 log = logger.bind(log_source="RAG")
 

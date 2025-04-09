@@ -6,7 +6,7 @@ from importlib import util
 import types
 import tempfile
 from loguru import logger
-from open_webui.env import SRC_LOG_LEVELS, PIP_OPTIONS, PIP_PACKAGE_INDEX_OPTIONS
+from open_webui.env import PIP_OPTIONS, PIP_PACKAGE_INDEX_OPTIONS
 from open_webui.models.functions import Functions
 from open_webui.models.tools import Tools
 

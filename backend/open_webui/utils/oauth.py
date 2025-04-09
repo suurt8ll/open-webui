@@ -45,7 +45,6 @@ from open_webui.utils.misc import parse_duration
 from open_webui.utils.auth import get_password_hash, create_token
 from open_webui.utils.webhook import post_webhook
 
-from open_webui.env import SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
 
 log = logger.bind(log_source="OAUTH")
 

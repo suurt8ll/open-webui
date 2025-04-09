@@ -84,7 +84,6 @@ from open_webui.config import (
     DEFAULT_CODE_INTERPRETER_PROMPT,
 )
 from open_webui.env import (
-    SRC_LOG_LEVELS,
     GLOBAL_LOG_LEVEL,
     BYPASS_MODEL_ACCESS_CONTROL,
     ENABLE_REALTIME_CHAT_SAVE,

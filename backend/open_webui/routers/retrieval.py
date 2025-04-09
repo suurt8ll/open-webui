@@ -87,7 +87,6 @@ from open_webui.config import (
     RAG_EMBEDDING_QUERY_PREFIX,
 )
 from open_webui.env import (
-    SRC_LOG_LEVELS,
     DEVICE_TYPE,
     DOCKER,
 )

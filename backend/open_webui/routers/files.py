@@ -18,7 +18,6 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse, StreamingResponse
 from open_webui.constants import ERROR_MESSAGES
-from open_webui.env import SRC_LOG_LEVELS
 from open_webui.models.files import (
     FileForm,
     FileModel,

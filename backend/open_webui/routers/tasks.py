@@ -35,7 +35,6 @@ from open_webui.config import (
     DEFAULT_EMOJI_GENERATION_PROMPT_TEMPLATE,
     DEFAULT_MOA_GENERATION_PROMPT_TEMPLATE,
 )
-from open_webui.env import SRC_LOG_LEVELS
 
 
 log = logger.bind(log_source="MODELS")
