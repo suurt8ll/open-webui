@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import os
 import uuid
 from fnmatch import fnmatch
@@ -34,9 +34,7 @@ from open_webui.storage.provider import Storage
 from open_webui.utils.auth import get_admin_user, get_verified_user
 from pydantic import BaseModel
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
-
+log = logger.bind(log_source="MODELS")
 
 router = APIRouter()
 

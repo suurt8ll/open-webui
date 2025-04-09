@@ -2,7 +2,7 @@ import hashlib
 import re
 import time
 import uuid
-import logging
+from loguru import logger
 from datetime import timedelta
 from pathlib import Path
 from typing import Callable, Optional
@@ -12,9 +12,7 @@ import json
 import collections.abc
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 def deep_update(d, u):
     for k, v in u.items():

@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 from typing import Optional
 
 from open_webui.models.auths import Auths
@@ -23,8 +23,7 @@ from open_webui.utils.auth import get_admin_user, get_password_hash, get_verifie
 from open_webui.utils.access_control import get_permissions
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
+log = logger.bind(log_source="MODELS")
 
 router = APIRouter()
 

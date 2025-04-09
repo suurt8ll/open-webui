@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import sys
 import inspect
 import json
@@ -47,10 +47,7 @@ from open_webui.utils.payload import (
 )
 
 
-logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 def get_function_module_by_id(request: Request, pipe_id: str):
     # Check if function is already loaded

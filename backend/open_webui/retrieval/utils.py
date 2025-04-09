@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import os
 from typing import Optional, Union
 
@@ -31,9 +31,7 @@ from open_webui.config import (
     RAG_EMBEDDING_PREFIX_FIELD_NAME,
 )
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 from typing import Any
 

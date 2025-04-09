@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
 from typing import Optional
-import logging
-
+from loguru import logger
 from open_webui.models.users import Users
 from open_webui.models.groups import (
     Groups,
@@ -19,8 +18,7 @@ from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.env import SRC_LOG_LEVELS
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
+log = logger.bind(log_source="MAIN")
 
 router = APIRouter()
 

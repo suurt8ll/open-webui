@@ -1,7 +1,7 @@
 import os
 import shutil
 import json
-import logging
+from loguru import logger
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Tuple
 
@@ -34,9 +34,7 @@ from azure.core.exceptions import ResourceNotFoundError
 from open_webui.env import SRC_LOG_LEVELS
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 class StorageProvider(ABC):
     @abstractmethod

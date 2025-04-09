@@ -1,5 +1,5 @@
 import os
-import logging
+from loguru import logger
 import torch
 import numpy as np
 from colbert.infra import ColBERTConfig
@@ -7,9 +7,7 @@ from colbert.modeling.checkpoint import Checkpoint
 
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 class ColBERT:
     def __init__(self, name, **kwargs) -> None:

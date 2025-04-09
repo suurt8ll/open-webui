@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import uuid
 from typing import Optional
 
@@ -9,8 +9,7 @@ from pydantic import BaseModel
 from sqlalchemy import Boolean, Column, String, Text
 from open_webui.utils.auth import verify_password
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
+log = logger.bind(log_source="MODELS")
 
 ####################
 # DB MODEL

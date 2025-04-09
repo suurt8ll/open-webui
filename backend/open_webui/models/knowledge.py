@@ -1,5 +1,5 @@
 import json
-import logging
+from loguru import logger
 import time
 from typing import Optional
 import uuid
@@ -16,8 +16,7 @@ from sqlalchemy import BigInteger, Column, String, Text, JSON
 
 from open_webui.utils.access_control import has_access
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
+log = logger.bind(log_source="MODELS")
 
 ####################
 # Knowledge DB Schema

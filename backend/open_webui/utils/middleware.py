@@ -1,5 +1,5 @@
 import time
-import logging
+from loguru import logger
 import sys
 import os
 import base64
@@ -92,10 +92,7 @@ from open_webui.env import (
 from open_webui.constants import TASKS
 
 
-logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 async def chat_completion_tools_handler(
     request: Request, body: dict, extra_params: dict, user: UserModel, models, tools

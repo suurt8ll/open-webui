@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 from contextvars import ContextVar
 
 from open_webui.env import SRC_LOG_LEVELS
@@ -8,8 +8,7 @@ from peewee import PostgresqlDatabase
 from playhouse.db_url import connect, parse
 from playhouse.shortcuts import ReconnectMixin
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["DB"])
+log = logger.bind(log_source="DB")
 
 db_state_default = {"closed": None, "conn": None, "ctx": None, "transactions": None}
 db_state = ContextVar("db_state", default=db_state_default.copy())

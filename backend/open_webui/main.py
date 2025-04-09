@@ -1,7 +1,7 @@
 import asyncio
 import inspect
 import json
-import logging
+from loguru import logger
 import mimetypes
 import os
 import shutil
@@ -45,7 +45,6 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import Response, StreamingResponse
 
 
-from open_webui.utils import logger
 from open_webui.utils.audit import AuditLevel, AuditLoggingMiddleware
 from open_webui.utils.logger import start_logger
 from open_webui.socket.main import (
@@ -381,10 +380,7 @@ if SAFE_MODE:
     print("SAFE MODE ENABLED")
     Functions.deactivate_all_functions()
 
-logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_level="MAIN")
 
 class SPAStaticFiles(StaticFiles):
     async def get_response(self, path: str, scope):
@@ -970,7 +966,7 @@ app.include_router(utils.router, prefix="/api/v1/utils", tags=["utils"])
 try:
     audit_level = AuditLevel(AUDIT_LOG_LEVEL)
 except ValueError as e:
-    logger.error(f"Invalid audit level: {AUDIT_LOG_LEVEL}. Error: {e}")
+    log.error(f"Invalid audit level: {AUDIT_LOG_LEVEL}. Error: {e}")
     audit_level = AuditLevel.NONE
 
 if audit_level != AuditLevel.NONE:

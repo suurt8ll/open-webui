@@ -2,7 +2,7 @@ import asyncio
 import base64
 import io
 import json
-import logging
+from loguru import logger
 import mimetypes
 import re
 from pathlib import Path
@@ -22,8 +22,7 @@ from open_webui.utils.images.comfyui import (
 )
 from pydantic import BaseModel
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["IMAGES"])
+log = logger.bind(log_source="IMAGES")
 
 IMAGE_CACHE_DIR = CACHE_DIR / "image" / "generations"
 IMAGE_CACHE_DIR.mkdir(parents=True, exist_ok=True)

@@ -1,5 +1,5 @@
 import os
-import logging
+from loguru import logger
 from pathlib import Path
 from typing import Optional
 
@@ -16,9 +16,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 router = APIRouter()
 

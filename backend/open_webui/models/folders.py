@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import time
 import uuid
 from typing import Optional
@@ -12,9 +12,7 @@ from sqlalchemy import BigInteger, Column, Text, JSON, Boolean
 from open_webui.utils.access_control import get_permissions
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
-
+log = logger.bind(log_source="MODELS")
 
 ####################
 # Folder DB Schema

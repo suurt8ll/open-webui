@@ -1,6 +1,6 @@
 import asyncio
 import json
-import logging
+from loguru import logger
 import random
 import urllib.parse
 import urllib.request
@@ -10,8 +10,7 @@ import websocket  # NOTE: websocket-client (https://github.com/websocket-client/
 from open_webui.env import SRC_LOG_LEVELS
 from pydantic import BaseModel
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["COMFYUI"])
+log = logger.bind(log_source="COMFYUI")
 
 default_headers = {"User-Agent": "Mozilla/5.0"}
 

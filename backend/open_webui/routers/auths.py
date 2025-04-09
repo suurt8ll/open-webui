@@ -2,7 +2,7 @@ import re
 import uuid
 import time
 import datetime
-import logging
+from loguru import logger
 from aiohttp import ClientSession
 
 from open_webui.models.auths import (
@@ -55,8 +55,7 @@ if ENABLE_LDAP.value:
 
 router = APIRouter()
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
+log = logger.bind(log_source="MAIN")
 
 ############################
 # GetSessionUser

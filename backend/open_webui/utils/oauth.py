@@ -1,5 +1,5 @@
 import base64
-import logging
+from loguru import logger
 import mimetypes
 import sys
 import uuid
@@ -47,9 +47,7 @@ from open_webui.utils.webhook import post_webhook
 
 from open_webui.env import SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
 
-logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["OAUTH"])
+log = logger.bind(log_source="OAUTH")
 
 auth_manager_config = AppConfig()
 auth_manager_config.DEFAULT_USER_ROLE = DEFAULT_USER_ROLE

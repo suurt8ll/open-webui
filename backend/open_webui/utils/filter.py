@@ -1,13 +1,10 @@
 import inspect
-import logging
-
+from loguru import logger
 from open_webui.utils.plugin import load_function_module_by_id
 from open_webui.models.functions import Functions
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 def get_sorted_filter_ids(model: dict):
     def get_priority(function_id):

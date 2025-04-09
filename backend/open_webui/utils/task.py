@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import math
 import re
 from datetime import datetime
@@ -12,9 +12,7 @@ from open_webui.env import SRC_LOG_LEVELS
 from open_webui.config import DEFAULT_RAG_TEMPLATE
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 def get_task_model_id(
     default_model_id: str, task_model: str, task_model_external: str, models

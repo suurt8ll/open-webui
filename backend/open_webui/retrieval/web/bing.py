@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import os
 from pprint import pprint
 from typing import Optional
@@ -7,8 +7,8 @@ from open_webui.retrieval.web.main import SearchResult, get_filtered_results
 from open_webui.env import SRC_LOG_LEVELS
 import argparse
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
+log = logger.bind(log_source="RAG")
+
 """
 Documentation: https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/overview
 """

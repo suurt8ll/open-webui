@@ -1,6 +1,6 @@
 import asyncio
 import json
-import logging
+from loguru import logger
 import uuid
 from typing import Optional
 
@@ -10,9 +10,7 @@ from pydantic import BaseModel
 
 from open_webui.env import SRC_LOG_LEVELS
 
-logger = logging.getLogger(__name__)
-logger.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 class ResultModel(BaseModel):
     """

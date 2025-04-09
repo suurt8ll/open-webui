@@ -1,13 +1,10 @@
-import logging
-
+from loguru import logger
 import requests
 from open_webui.retrieval.web.main import SearchResult
 from open_webui.env import SRC_LOG_LEVELS
 from yarl import URL
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 def search_jina(api_key: str, query: str, count: int) -> list[SearchResult]:
     """

@@ -11,7 +11,7 @@ from fastapi import (
 )
 import aiohttp
 import os
-import logging
+from loguru import logger
 import shutil
 import requests
 from pydantic import BaseModel
@@ -27,9 +27,7 @@ from open_webui.routers.openai import get_all_models_responses
 
 from open_webui.utils.auth import get_admin_user
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 ##################################
 #

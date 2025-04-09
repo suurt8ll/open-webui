@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import os
 import time
 
@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import text, create_engine
 
 
-log = logging.getLogger(__name__)
+log = logger.bind()
 
 
 def get_fast_api_client():

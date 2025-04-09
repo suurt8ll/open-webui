@@ -1,7 +1,7 @@
 from pymilvus import MilvusClient as Client
 from pymilvus import FieldSchema, DataType
 import json
-import logging
+from loguru import logger
 from typing import Optional
 
 from open_webui.retrieval.vector.main import VectorItem, SearchResult, GetResult
@@ -12,9 +12,7 @@ from open_webui.config import (
 )
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 class MilvusClient:
     def __init__(self):

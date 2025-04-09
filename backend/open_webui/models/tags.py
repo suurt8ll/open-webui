@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import time
 import uuid
 from typing import Optional
@@ -10,9 +10,7 @@ from open_webui.env import SRC_LOG_LEVELS
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import BigInteger, Column, String, JSON, PrimaryKeyConstraint
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
-
+log = logger.bind(log_source="MODELS")
 
 ####################
 # Tag DB Schema

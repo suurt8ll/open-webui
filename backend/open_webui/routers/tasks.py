@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 
 from pydantic import BaseModel
 from typing import Optional
-import logging
+from loguru import logger
 import re
 
 from open_webui.utils.chat import generate_chat_completion
@@ -38,8 +38,7 @@ from open_webui.config import (
 from open_webui.env import SRC_LOG_LEVELS
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
+log = logger.bind(log_source="MODELS")
 
 router = APIRouter()
 

@@ -1,5 +1,5 @@
 import asyncio
-import logging
+from loguru import logger
 import socket
 import ssl
 import urllib.parse
@@ -38,9 +38,7 @@ from open_webui.config import (
 )
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 def validate_url(url: Union[str, Sequence[str]]):
     if isinstance(url, str):

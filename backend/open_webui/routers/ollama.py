@@ -4,7 +4,7 @@
 
 import asyncio
 import json
-import logging
+from loguru import logger
 import os
 import random
 import re
@@ -60,9 +60,7 @@ from open_webui.env import (
 )
 from open_webui.constants import ERROR_MESSAGES
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["OLLAMA"])
-
+log = logger.bind(log_source="OLLAMA")
 
 ##########################################
 #

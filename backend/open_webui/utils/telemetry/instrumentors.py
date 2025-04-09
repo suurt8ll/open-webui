@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import traceback
 from typing import Collection, Union
 
@@ -30,9 +30,7 @@ from open_webui.utils.telemetry.constants import SPAN_REDIS_TYPE, SpanAttributes
 
 from open_webui.env import SRC_LOG_LEVELS
 
-logger = logging.getLogger(__name__)
-logger.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 def requests_hook(span: Span, request: PreparedRequest):
     """
@@ -83,7 +81,7 @@ def redis_request_hook(span: Span, instance: Redis, args, kwargs):
             }
         )
     except Exception:  # pylint: disable=W0718
-        logger.error(traceback.format_exc())
+        log.error(traceback.format_exc())
 
 
 def httpx_request_hook(span: Span, request: RequestInfo):

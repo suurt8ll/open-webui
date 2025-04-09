@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-import logging
+from loguru import logger
 from sqlalchemy import (
     cast,
     column,
@@ -30,9 +30,7 @@ from open_webui.env import SRC_LOG_LEVELS
 VECTOR_LENGTH = PGVECTOR_INITIALIZE_MAX_VECTOR_LENGTH
 Base = declarative_base()
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 class DocumentChunk(Base):
     __tablename__ = "document_chunk"

@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 import json
 import time
 import uuid
@@ -17,9 +17,7 @@ from sqlalchemy.sql import exists
 # Chat DB Schema
 ####################
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MODELS"])
-
+log = logger.bind(log_source="MODELS")
 
 class Chat(Base):
     __tablename__ = "chat"

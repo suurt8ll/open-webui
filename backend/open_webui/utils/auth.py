@@ -1,4 +1,5 @@
 import logging
+from loguru import logger
 import uuid
 import jwt
 import base64
@@ -28,10 +29,9 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 
 
+# Reduce the amount of logs coming from passlib library.
 logging.getLogger("passlib").setLevel(logging.ERROR)
-
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["OAUTH"])
+log = logger.bind(log_source="OAUTH")
 
 SESSION_SECRET = WEBUI_SECRET_KEY
 ALGORITHM = "HS256"

@@ -1,6 +1,5 @@
 from typing import Optional
-import logging
-
+from loguru import logger
 from qdrant_client import QdrantClient as Qclient
 from qdrant_client.http.models import PointStruct
 from qdrant_client.models import models
@@ -11,9 +10,7 @@ from open_webui.env import SRC_LOG_LEVELS
 
 NO_LIMIT = 999999999
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 class QdrantClient:
     def __init__(self):

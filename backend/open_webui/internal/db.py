@@ -1,5 +1,5 @@
 import json
-import logging
+from loguru import logger
 from contextlib import contextmanager
 from typing import Any, Optional
 
@@ -22,9 +22,7 @@ from sqlalchemy.pool import QueuePool, NullPool
 from sqlalchemy.sql.type_api import _T
 from typing_extensions import Self
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["DB"])
-
+log = logger.bind(log_source="DB")
 
 class JSONField(types.TypeDecorator):
     impl = types.Text

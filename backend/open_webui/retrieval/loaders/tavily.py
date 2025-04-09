@@ -1,14 +1,12 @@
 import requests
-import logging
+from loguru import logger
 from typing import Iterator, List, Literal, Union
 
 from langchain_core.document_loaders import BaseLoader
 from langchain_core.documents import Document
 from open_webui.env import SRC_LOG_LEVELS
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
-
+log = logger.bind(log_source="RAG")
 
 class TavilyLoader(BaseLoader):
     """Extract web page content from URLs using Tavily Extract API.

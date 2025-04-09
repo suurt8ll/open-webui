@@ -1,5 +1,5 @@
 import json
-import logging
+from loguru import logger
 import mimetypes
 import os
 import shutil
@@ -93,8 +93,7 @@ from open_webui.env import (
 )
 from open_webui.constants import ERROR_MESSAGES
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
+log = logger.bind(log_source="RAG")
 
 ##########################################
 #
@@ -1472,7 +1471,7 @@ async def process_web_search(
     request: Request, form_data: SearchForm, user=Depends(get_verified_user)
 ):
     try:
-        logging.info(
+        log.info(
             f"trying to web search with {request.app.state.config.RAG_WEB_SEARCH_ENGINE, form_data.query}"
         )
         web_results = search_web(

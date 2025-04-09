@@ -1,7 +1,7 @@
 import asyncio
 import hashlib
 import json
-import logging
+from loguru import logger
 from pathlib import Path
 from typing import Literal, Optional, overload
 
@@ -44,9 +44,7 @@ from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.utils.access_control import has_access
 
 
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["OPENAI"])
-
+log = logger.bind(log_source="OPENAI")
 
 ##########################################
 #

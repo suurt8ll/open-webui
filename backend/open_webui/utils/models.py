@@ -1,5 +1,5 @@
 import time
-import logging
+from loguru import logger
 import sys
 
 from aiocache import cached
@@ -25,10 +25,7 @@ from open_webui.env import SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
 from open_webui.models.users import UserModel
 
 
-logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
-log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["MAIN"])
-
+log = logger.bind(log_source="MAIN")
 
 async def get_all_base_models(request: Request, user: UserModel = None):
     function_models = []
