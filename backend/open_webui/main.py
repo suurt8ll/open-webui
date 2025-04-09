@@ -1,7 +1,12 @@
+# Set up logging with loguru as early as possible.
+from open_webui.utils.logger import start_logger
+start_logger()
+from loguru import logger
+log = logger.bind(log_level="MAIN")
+
 import asyncio
 import inspect
 import json
-from loguru import logger
 import mimetypes
 import os
 import shutil
@@ -46,7 +51,6 @@ from starlette.responses import Response, StreamingResponse
 
 
 from open_webui.utils.audit import AuditLevel, AuditLoggingMiddleware
-from open_webui.utils.logger import start_logger
 from open_webui.socket.main import (
     app as socket_app,
     periodic_usage_pool_cleanup,
@@ -380,8 +384,6 @@ if SAFE_MODE:
     print("SAFE MODE ENABLED")
     Functions.deactivate_all_functions()
 
-log = logger.bind(log_level="MAIN")
-
 class SPAStaticFiles(StaticFiles):
     async def get_response(self, path: str, scope):
         try:
@@ -416,7 +418,6 @@ https://github.com/open-webui/open-webui
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    start_logger()
     if RESET_CONFIG_ON_START:
         reset_config()
 
