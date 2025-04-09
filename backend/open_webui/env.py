@@ -1,3 +1,4 @@
+import datetime
 import importlib.metadata
 import json
 import logging
@@ -65,17 +66,11 @@ except Exception:
 # LOGGING
 ####################################
 
-GLOBAL_LOG_LEVEL = os.environ.get("GLOBAL_LOG_LEVEL", "").upper()
-if GLOBAL_LOG_LEVEL in logging.getLevelNamesMapping():
-    logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL, force=True)
-else:
-    GLOBAL_LOG_LEVEL = "INFO"
-
-log = logging.getLogger(__name__)
-log.info(f"GLOBAL_LOG_LEVEL: {GLOBAL_LOG_LEVEL}")
+GLOBAL_LOG_LEVEL = os.environ.get("GLOBAL_LOG_LEVEL", "INFO").upper()
+print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: {GLOBAL_LOG_LEVEL=}")
 
 if "cuda_error" in locals():
-    log.exception(cuda_error)
+    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: {cuda_error=}")
     del cuda_error
 
 log_sources = [
@@ -101,9 +96,7 @@ for source in log_sources:
     SRC_LOG_LEVELS[source] = os.environ.get(log_env_var, "").upper()
     if SRC_LOG_LEVELS[source] not in logging.getLevelNamesMapping():
         SRC_LOG_LEVELS[source] = GLOBAL_LOG_LEVEL
-    log.info(f"{log_env_var}: {SRC_LOG_LEVELS[source]}")
-
-log.setLevel(SRC_LOG_LEVELS["CONFIG"])
+    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: {log_env_var}: {SRC_LOG_LEVELS[source]}")
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
 if WEBUI_NAME != "Open WebUI":
@@ -223,7 +216,7 @@ if FROM_INIT_PY:
 
     # Check if the data directory exists in the package directory
     if DATA_DIR.exists() and DATA_DIR != NEW_DATA_DIR:
-        log.info(f"Moving {DATA_DIR} to {NEW_DATA_DIR}")
+        print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Moving {DATA_DIR} to {NEW_DATA_DIR}")
         for item in DATA_DIR.iterdir():
             dest = NEW_DATA_DIR / item.name
             if item.is_dir():
@@ -258,7 +251,7 @@ if FROM_INIT_PY:
 if os.path.exists(f"{DATA_DIR}/ollama.db"):
     # Rename the file
     os.rename(f"{DATA_DIR}/ollama.db", f"{DATA_DIR}/webui.db")
-    log.info("Database migrated from Ollama-WebUI successfully.")
+    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Database migrated from Ollama-WebUI successfully.")
 else:
     pass
 
@@ -338,7 +331,7 @@ try:
         UVICORN_WORKERS = 1
 except ValueError:
     UVICORN_WORKERS = 1
-    log.info(f"Invalid UVICORN_WORKERS value, defaulting to {UVICORN_WORKERS}")
+    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Invalid UVICORN_WORKERS value, defaulting to {UVICORN_WORKERS=}")
 
 ####################################
 # WEBUI_AUTH (Required for security)
