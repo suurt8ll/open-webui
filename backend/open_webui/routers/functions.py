@@ -186,7 +186,7 @@ async def update_function_by_id(
         FUNCTIONS[id] = function_module
 
         updated = {**form_data.model_dump(exclude={"id"}), "type": function_type}
-        log.debug(updated)
+        log.debug(f"Updating function with ID {id}", payload=updated)
 
         function = Functions.update_function_by_id(id, updated)
 

@@ -1042,7 +1042,7 @@ async def get_models(request: Request, user=Depends(get_verified_user)):
         models = get_filtered_models(models, user)
 
     log.debug(
-        f"/api/models returned filtered models accessible to the user: {json.dumps([model['id'] for model in models])}"
+        f"/api/models returned filtered models accessible to the user:", model_ids=[model['id'] for model in models]
     )
     return {"data": models}
 

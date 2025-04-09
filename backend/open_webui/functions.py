@@ -113,7 +113,7 @@ async def get_function_models(request):
             pipe_flag = {"type": "pipe"}
 
             log.debug(
-                f"get_function_models: function '{pipe.id}' is a single pipe {{ 'id': {pipe.id}, 'name': {pipe.name} }}"
+                f"get_function_models: function '{pipe.id}' is a single pipe", pipe=pipe
             )
 
             pipe_models.append(

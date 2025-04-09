@@ -1,9 +1,9 @@
-import json
 import logging
-import sys
-from typing import TYPE_CHECKING
-
 from loguru import logger
+import sys
+import json
+import pydantic_core
+from typing import TYPE_CHECKING, Any
 
 from open_webui.env import (
     AUDIT_LOG_FILE_ROTATION_SIZE,
@@ -16,16 +16,37 @@ from open_webui.env import (
 if TYPE_CHECKING:
     from loguru import Record
 
+def is_simple_dict(data: dict[str, Any]) -> bool:
+    """
+    Checks if a dictionary contains only non-dict/non-list values (is one level deep).
+    """
+    if not isinstance(data, dict):
+        return False
+    for value in data.values():
+        if isinstance(value, (dict, list)):
+            return False
+    return True
+
 def stdout_format(record: "Record") -> str:
     """
-    Generates a formatted string for log records that are output to the console. This format includes a timestamp, log level, source location (module, function, and line), the log message, and any extra data (serialized as JSON).
+    Generates a formatted string for log records for console output.
+    Includes timestamp, level, source, message, and extra data (JSON formatted).
+    JSON is single-line for simple dicts, indented for complex ones.
 
     Parameters:
     record (Record): A Loguru record that contains logging details including time, level, name, function, line, message, and any extra context.
     Returns:
     str: A formatted log string intended for stdout.
     """
-    record["extra"]["extra_json"] = json.dumps(record["extra"])
+    extra_data = pydantic_core.to_jsonable_python(record["extra"])
+
+    if is_simple_dict(extra_data):
+        extra_json_str = json.dumps(extra_data, separators=(',', ':'), default=str)
+    else:
+        extra_json_str = "\n" + json.dumps(extra_data, indent=2, default=str)
+
+    record["extra"]["extra_json"] = extra_json_str
+
     return (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
         "<level>{level: <8}</level> | "
