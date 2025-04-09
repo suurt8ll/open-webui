@@ -91,6 +91,44 @@ def file_format(record: "Record"):
     record["extra"]["file_extra"] = json.dumps(audit_data, default=str)
     return "{extra[file_extra]}\n"
 
+def dynamic_level_filter(record: "Record"):
+    """
+    Filters logs based on a 'log_level' specified in the record's extra data.
+    If 'log_level' is not present or invalid, it defaults to GLOBAL_LOG_LEVEL.
+    Allows a message if its level is >= the specified or default level.
+    """
+    # Use GLOBAL_LOG_LEVEL from env as the default
+    default_level_name = GLOBAL_LOG_LEVEL
+    log_level_name = record["extra"].get("log_level", default_level_name)
+
+    message_level = logger.level(record["level"].name).no  # Get numeric level of the message
+    try:
+        # Get numeric level from 'extra' or use default
+        bypass_level = logger.level(log_level_name).no
+    except ValueError:
+        # Fallback to default if the provided level name is invalid
+        print(
+            f"Warning: Invalid log level '{log_level_name}' provided in logger.bind(). "
+            f"Using default '{default_level_name}' instead.",
+            file=sys.stderr # Print warnings to stderr
+        )
+        bypass_level = logger.level(default_level_name).no
+
+    # Log the message if its level is high enough compared to the bound/default level
+    return message_level >= bypass_level
+
+def stdout_filter(record: "Record"):
+    """
+    Combined filter for the stdout handler.
+    1. Excludes messages marked as 'auditable'.
+    2. Applies the dynamic level filtering logic.
+    """
+    # Condition 1: Exclude auditable logs from stdout
+    if record["extra"].get("auditable") is True:
+        return False
+
+    # Condition 2: Apply dynamic level filtering
+    return dynamic_level_filter(record)
 
 def start_logger():
     """
@@ -107,9 +145,9 @@ def start_logger():
 
     logger.add(
         sys.stdout,
-        level=GLOBAL_LOG_LEVEL,
+        level=0,
         format=stdout_format,
-        filter=lambda record: "auditable" not in record["extra"],
+        filter=stdout_filter,
     )
 
     if AUDIT_LOG_LEVEL != "NONE":
@@ -137,4 +175,5 @@ def start_logger():
         uvicorn_logger.setLevel(GLOBAL_LOG_LEVEL)
         uvicorn_logger.handlers = [InterceptHandler()]
 
-    logger.info(f"GLOBAL_LOG_LEVEL: {GLOBAL_LOG_LEVEL}")
+    logger.info(f"Logger initialized. Default stdout log level (when not bound): {GLOBAL_LOG_LEVEL}")
+    logger.info("Use logger.bind(log_level='LEVEL').<log_method>('...') to set per-message levels.")
