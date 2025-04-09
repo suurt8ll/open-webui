@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import text, create_engine
 
 
-log = logger.bind()
+log = logger.bind(log_source="TEST")
 
 
 def get_fast_api_client():

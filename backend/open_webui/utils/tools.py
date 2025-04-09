@@ -40,7 +40,7 @@ from open_webui.env import AIOHTTP_CLIENT_TIMEOUT_TOOL_SERVER_DATA
 
 import copy
 
-log = logger.bind()
+log = logger.bind(log_source="MAIN")
 
 
 def get_async_tool_function_and_apply_extra_params(

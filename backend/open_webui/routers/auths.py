@@ -54,7 +54,7 @@ if ENABLE_LDAP.value:
 
 router = APIRouter()
 
-log = logger.bind(log_source="MAIN")
+log = logger.bind(log_source="OAUTH")
 
 ############################
 # GetSessionUser

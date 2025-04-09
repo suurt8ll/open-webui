@@ -1,4 +1,6 @@
+import datetime
 # Set up logging with loguru as early as possible.
+print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [MAIN] INFO: Open WebUI is starting up...")
 from open_webui.utils.logger import start_logger
 start_logger()
 from loguru import logger
@@ -1484,3 +1486,4 @@ else:
     log.warning(
         f"Frontend build directory not found at '{FRONTEND_BUILD_DIR}'. Serving API only."
     )
+log.info("Open WebUI backend setup complete. Ready to accept API calls.")

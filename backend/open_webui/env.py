@@ -17,20 +17,20 @@ from open_webui.constants import ERROR_MESSAGES
 ####################################
 
 OPEN_WEBUI_DIR = Path(__file__).parent  # the path containing this file
-print(OPEN_WEBUI_DIR)
+print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] DEBUG: {OPEN_WEBUI_DIR=}")
 
 BACKEND_DIR = OPEN_WEBUI_DIR.parent  # the path containing this file
 BASE_DIR = BACKEND_DIR.parent  # the path containing the backend/
 
-print(BACKEND_DIR)
-print(BASE_DIR)
+print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] DEBUG: {BACKEND_DIR=}")
+print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] DEBUG: {BASE_DIR=}")
 
 try:
     from dotenv import find_dotenv, load_dotenv
 
     load_dotenv(find_dotenv(str(BASE_DIR / ".env")))
 except ImportError:
-    print("dotenv not installed, skipping...")
+    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: dotenv not installed, skipping...")
 
 DOCKER = os.environ.get("DOCKER", "False").lower() == "true"
 
@@ -87,6 +87,8 @@ log_sources = [
     "WEBHOOK",
     "SOCKET",
     "OAUTH",
+    "TELEMETRY",
+    "TEST",
 ]
 
 SRC_LOG_LEVELS = {}
@@ -96,7 +98,7 @@ for source in log_sources:
     SRC_LOG_LEVELS[source] = os.environ.get(log_env_var, "").upper()
     if SRC_LOG_LEVELS[source] not in logging.getLevelNamesMapping():
         SRC_LOG_LEVELS[source] = GLOBAL_LOG_LEVEL
-    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: {log_env_var}: {SRC_LOG_LEVELS[source]}")
+print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] DEBUG: SRC_LOG_LEVELS:\n{json.dumps(SRC_LOG_LEVELS, indent=2)}")
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
 if WEBUI_NAME != "Open WebUI":
@@ -331,7 +333,7 @@ try:
         UVICORN_WORKERS = 1
 except ValueError:
     UVICORN_WORKERS = 1
-    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Invalid UVICORN_WORKERS value, defaulting to {UVICORN_WORKERS=}")
+    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: Invalid UVICORN_WORKERS value, defaulting to {UVICORN_WORKERS=}")
 
 ####################################
 # WEBUI_AUTH (Required for security)

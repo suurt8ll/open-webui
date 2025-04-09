@@ -29,7 +29,7 @@ from fastapi import status
 from open_webui.utils.telemetry.constants import SPAN_REDIS_TYPE, SpanAttributes
 
 
-log = logger.bind(log_source="MAIN")
+log = logger.bind(log_source="TELEMETRY")
 
 def requests_hook(span: Span, request: PreparedRequest):
     """
