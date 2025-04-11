@@ -93,6 +93,7 @@ from open_webui.constants import TASKS
 
 log = logger.bind(log_source="MAIN")
 
+
 async def chat_completion_tools_handler(
     request: Request, body: dict, extra_params: dict, user: UserModel, models, tools
 ) -> tuple[dict, dict]:
@@ -690,7 +691,7 @@ def apply_params_to_form_data(form_data, model):
 async def process_chat_payload(request, form_data, user, metadata, model):
 
     form_data = apply_params_to_form_data(form_data, model)
-    log.debug(f"form_data: {form_data}")
+    log.debug(f"form_data:", form_data=form_data)
 
     event_emitter = get_event_emitter(metadata)
     event_call = get_event_call(metadata)

@@ -66,7 +66,7 @@ class AuditLogger:
     """
 
     def __init__(self, logger: "Logger"):
-        self.logger = logger.bind(auditable=True)
+        self.logger = logger.bind(_log_auditable=True)
 
     def write(
         self,

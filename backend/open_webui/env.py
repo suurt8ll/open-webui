@@ -105,9 +105,14 @@ print(
 )
 
 # Default Constants for Log Truncation
-LOG_TRUNCATION_ENABLED = os.environ.get("LOG_TRUNCATION_ENABLED", True)
+LOG_TRUNCATION_ENABLED = (
+    os.environ.get("LOG_TRUNCATION_ENABLED", "True").lower() == "true"
+)
 LOG_TRUNCATION_MAX_LENGTH = os.environ.get("LOG_TRUNCATION_MAX_LENGTH", 256)
 LOG_TRUNCATION_MARKER = os.environ.get("LOG_TRUNCATION_MARKER", "...(truncated)")
+
+# If logging settings inside record["extra"] should be displayed in log output.
+DEBUG_LOG_CONFIG = os.environ.get("DEBUG_LOG_CONFIG", "False").lower() == "true"
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
 if WEBUI_NAME != "Open WebUI":
