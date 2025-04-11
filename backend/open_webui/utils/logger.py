@@ -11,10 +11,51 @@ from open_webui.env import (
     AUDIT_LOGS_FILE_PATH,
     GLOBAL_LOG_LEVEL,
     SRC_LOG_LEVELS,
+    LOG_TRUNCATION_ENABLED,
+    LOG_TRUNCATION_MAX_LENGTH,
+    LOG_TRUNCATION_MARKER,
 )
 
 if TYPE_CHECKING:
     from loguru import Record
+
+
+def _truncate_long_strings(
+    data: Any, max_len: int, truncation_marker: str, truncation_enabled: bool
+) -> Any:
+    """
+    Recursively traverses a data structure (dicts, lists) and truncates
+    long string values.
+
+    Args:
+        data: The data structure (dict, list, str, int, float, bool, None) to process.
+        max_len: The maximum allowed length for string values.
+        truncation_marker: The string to append to truncated values.
+        truncation_enabled: Whether truncation is enabled.
+
+    Returns:
+        A new data structure with long strings truncated. Non-string values and
+        short strings are returned unchanged. Container types (dict, list)
+        are traversed.
+    """
+    if isinstance(data, dict):
+        return {
+            k: _truncate_long_strings(v, max_len, truncation_marker, truncation_enabled)
+            for k, v in data.items()
+        }
+    elif isinstance(data, list):
+        return [
+            _truncate_long_strings(item, max_len, truncation_marker, truncation_enabled)
+            for item in data
+        ]
+    elif isinstance(data, str):
+        if truncation_enabled and len(data) > max_len:
+            return data[: max_len - len(truncation_marker)] + truncation_marker
+        else:
+            return data
+    else:
+        return data
+
 
 def is_simple_dict(data: dict[str, Any]) -> bool:
     """
@@ -27,10 +68,12 @@ def is_simple_dict(data: dict[str, Any]) -> bool:
             return False
     return True
 
+
 def stdout_format(record: "Record") -> str:
     """
     Generates a formatted string for log records for console output.
     Includes timestamp, level, source, message, and extra data (JSON formatted).
+    Long string values within the extra data are truncated.
     JSON is single-line for simple dicts, indented for complex ones.
 
     Parameters:
@@ -38,22 +81,43 @@ def stdout_format(record: "Record") -> str:
     Returns:
     str: A formatted log string intended for stdout.
     """
-    extra_data = pydantic_core.to_jsonable_python(record["extra"])
+    serializable_extra = pydantic_core.to_jsonable_python(record["extra"])
 
-    if is_simple_dict(extra_data):
-        extra_json_str = json.dumps(extra_data, separators=(',', ':'), default=str)
+    # Override truncation settings from extra if present
+    max_length = record["extra"].get("log_max_length", LOG_TRUNCATION_MAX_LENGTH)
+    truncation_marker = record["extra"].get(
+        "log_truncation_marker", LOG_TRUNCATION_MARKER
+    )
+    truncation_enabled = record["extra"].get(
+        "log_truncation_enabled", LOG_TRUNCATION_ENABLED
+    )
+
+    # Enable truncation if log_max_length is provided, even if global truncation is off
+    if "log_max_length" in record["extra"]:
+        truncation_enabled = True
+
+    truncated_extra = _truncate_long_strings(
+        serializable_extra,
+        max_length,
+        truncation_marker,
+        truncation_enabled,
+    )
+
+    if is_simple_dict(truncated_extra):
+        extra_json_str = json.dumps(truncated_extra, separators=(",", ":"), default=str)
     else:
-        extra_json_str = "\n" + json.dumps(extra_data, indent=2, default=str)
+        extra_json_str = "\n" + json.dumps(truncated_extra, indent=2, default=str)
 
-    record["extra"]["extra_json"] = extra_json_str
+    record["extra"]["_formatted_extra_json"] = extra_json_str
 
     return (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
         "<level>{level: <8}</level> | "
         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
-        "<level>{message}</level> - {extra[extra_json]}"
+        "<level>{message}</level> - {extra[_formatted_extra_json]}"
         "\n{exception}"
     )
+
 
 class InterceptHandler(logging.Handler):
     """
@@ -80,6 +144,7 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=depth, exception=record.exc_info).log(
             level, record.getMessage()
         )
+
 
 def file_format(record: "Record"):
     """
@@ -109,6 +174,7 @@ def file_format(record: "Record"):
     record["extra"]["file_extra"] = json.dumps(audit_data, default=str)
     return "{extra[file_extra]}\n"
 
+
 def dynamic_level_filter(record: "Record"):
     """
     Filters logs based on the log level determined from the record's extra data. The log level is determined as follows:
@@ -135,11 +201,12 @@ def dynamic_level_filter(record: "Record"):
         print(
             f"Warning: Invalid log level '{log_level_name}' provided in logger.bind(). "
             f"Using default '{default_level_name}' instead.",
-            file=sys.stderr
+            file=sys.stderr,
         )
         bypass_level = logger.level(default_level_name).no
 
     return message_level >= bypass_level
+
 
 def stdout_filter(record: "Record"):
     """
@@ -153,6 +220,7 @@ def stdout_filter(record: "Record"):
 
     # Condition 2: Apply dynamic level filtering
     return dynamic_level_filter(record)
+
 
 def start_logger():
     """
@@ -198,5 +266,4 @@ def start_logger():
         uvicorn_logger.setLevel(GLOBAL_LOG_LEVEL)
         uvicorn_logger.handlers = [InterceptHandler()]
 
-    logger.info(f"Logger initialized. Default stdout log level (when not bound): {GLOBAL_LOG_LEVEL}")
-    logger.info("Use logger.bind(log_level='LEVEL', log_source='SOURCE').<log_method>('...') to set per-message levels and sources.")
+    logger.info(f"Logger initialized. Default stdout log level: {GLOBAL_LOG_LEVEL}")

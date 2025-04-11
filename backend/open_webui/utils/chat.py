@@ -56,6 +56,7 @@ from open_webui.env import BYPASS_MODEL_ACCESS_CONTROL
 
 log = logger.bind(log_source="MAIN")
 
+
 async def generate_direct_chat_completion(
     request: Request,
     form_data: dict,
@@ -157,7 +158,7 @@ async def generate_chat_completion(
     user: Any,
     bypass_filter: bool = False,
 ):
-    log.debug(f"generate_chat_completion: {form_data}")
+    log.debug(f"generate_chat_completion", form_data=form_data)
     if BYPASS_MODEL_ACCESS_CONTROL:
         bypass_filter = True
 

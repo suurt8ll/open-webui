@@ -30,7 +30,9 @@ try:
 
     load_dotenv(find_dotenv(str(BASE_DIR / ".env")))
 except ImportError:
-    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: dotenv not installed, skipping...")
+    print(
+        f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: dotenv not installed, skipping..."
+    )
 
 DOCKER = os.environ.get("DOCKER", "False").lower() == "true"
 
@@ -98,7 +100,14 @@ for source in log_sources:
     SRC_LOG_LEVELS[source] = os.environ.get(log_env_var, "").upper()
     if SRC_LOG_LEVELS[source] not in logging.getLevelNamesMapping():
         SRC_LOG_LEVELS[source] = GLOBAL_LOG_LEVEL
-print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] DEBUG: SRC_LOG_LEVELS:\n{json.dumps(SRC_LOG_LEVELS, indent=2)}")
+print(
+    f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] DEBUG: SRC_LOG_LEVELS:\n{json.dumps(SRC_LOG_LEVELS, indent=2)}"
+)
+
+# Default Constants for Log Truncation
+LOG_TRUNCATION_ENABLED = os.environ.get("LOG_TRUNCATION_ENABLED", True)
+LOG_TRUNCATION_MAX_LENGTH = os.environ.get("LOG_TRUNCATION_MAX_LENGTH", 256)
+LOG_TRUNCATION_MARKER = os.environ.get("LOG_TRUNCATION_MARKER", "...(truncated)")
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
 if WEBUI_NAME != "Open WebUI":
@@ -218,7 +227,9 @@ if FROM_INIT_PY:
 
     # Check if the data directory exists in the package directory
     if DATA_DIR.exists() and DATA_DIR != NEW_DATA_DIR:
-        print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Moving {DATA_DIR} to {NEW_DATA_DIR}")
+        print(
+            f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Moving {DATA_DIR} to {NEW_DATA_DIR}"
+        )
         for item in DATA_DIR.iterdir():
             dest = NEW_DATA_DIR / item.name
             if item.is_dir():
@@ -253,7 +264,9 @@ if FROM_INIT_PY:
 if os.path.exists(f"{DATA_DIR}/ollama.db"):
     # Rename the file
     os.rename(f"{DATA_DIR}/ollama.db", f"{DATA_DIR}/webui.db")
-    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Database migrated from Ollama-WebUI successfully.")
+    print(
+        f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] INFO: Database migrated from Ollama-WebUI successfully."
+    )
 else:
     pass
 
@@ -333,7 +346,9 @@ try:
         UVICORN_WORKERS = 1
 except ValueError:
     UVICORN_WORKERS = 1
-    print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: Invalid UVICORN_WORKERS value, defaulting to {UVICORN_WORKERS=}")
+    print(
+        f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S} [ENV] ERROR: Invalid UVICORN_WORKERS value, defaulting to {UVICORN_WORKERS=}"
+    )
 
 ####################################
 # WEBUI_AUTH (Required for security)
