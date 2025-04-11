@@ -5,13 +5,14 @@ import uuid
 from loguru import logger
 from datetime import timedelta
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Any, Optional
 import json
 
 
 import collections.abc
 
 log = logger.bind(log_source="MAIN")
+
 
 def deep_update(d, u):
     for k, v in u.items():
@@ -20,6 +21,59 @@ def deep_update(d, u):
         else:
             d[k] = v
     return d
+
+
+def truncate_long_strings(
+    data: Any, max_length: int, truncation_marker: str, truncation_enabled: bool
+) -> Any:
+    """
+    Recursively traverses a data structure (dicts, lists) and truncates
+    long string values. Be careful and know when to use `.copy()` or `copy.deepcopy()`
+    before you pass `data`!
+
+    Args:
+        data: The data structure (dict, list, str, int, float, bool, None) to process.
+        max_length: The maximum allowed length for string values.
+        truncation_marker: The string to append to truncated values.
+        truncation_enabled: Whether truncation is enabled.
+
+    Returns:
+        A new data structure with long strings truncated. Non-string values and
+        short strings are returned unchanged. Container types (dict, list)
+        are traversed.
+    """
+    if not truncation_enabled:
+        return data
+
+    if isinstance(data, str):
+        if len(data) > max_length:
+            return data[:max_length] + truncation_marker
+        return data
+    elif isinstance(data, dict):
+        return {
+            key: truncate_long_strings(
+                value, max_length, truncation_marker, truncation_enabled
+            )
+            for key, value in data.items()
+        }
+    elif isinstance(data, list):
+        return [
+            truncate_long_strings(
+                item, max_length, truncation_marker, truncation_enabled
+            )
+            for item in data
+        ]
+    else:
+        return data
+
+
+def is_flat_dict(data: Any) -> bool:
+    """
+    Checks if a dictionary contains only non-dict/non-list values (is one level deep).
+    """
+    if not isinstance(data, dict):
+        return False
+    return not any(isinstance(value, (dict, list)) for value in data.values())
 
 
 def get_message_list(messages, message_id):
